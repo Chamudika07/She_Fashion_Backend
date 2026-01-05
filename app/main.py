@@ -26,3 +26,5 @@ app.include_router(schole_shoes.router)
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
+#check git status
