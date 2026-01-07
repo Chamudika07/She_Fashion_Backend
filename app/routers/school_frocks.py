@@ -34,4 +34,29 @@ def get_all_frocks(db: Session = Depends(get_db),
     
     frocks = db.query(models.SchoolFrocks).all()
     return frocks
+
+#buy and sell school frocks
+@router.put("/quantity", response_model=school_frocks_schemas.SchoolFrockOut)
+def update_frock_quantity( frock_update: school_frocks_schemas.FrockQuntityUpdate, db: Session = Depends(get_db), 
+                current_user: int = Depends(oauth2.get_current_user)):
+    
+    frock_query = db.query(models.SchoolFrocks).filter(models.SchoolFrocks.size == frock_update.size)
+    frock = frock_query.first()
+    
+    if not frock:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Frock size {frock_update.size} not found")
+    
+    if frock_update.action == "sell":
+        if frock.quntity < frock_update.quntity:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Insufficient quantity to sell")
+        frock.quntity -= frock_update.quntity
+    elif frock_update.action == "buy":
+        frock.quntity += frock_update.quntity
+    
+    else:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid action. Use 'buy' or 'sell'.")
+    
+    frock_query.update({"quntity": frock.quntity}, synchronize_session=False)
+    db.commit()
+    return frock_query.first()
     

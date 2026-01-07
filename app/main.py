@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from . import models
 from .database import engine
-from .routers import user , schole_shoes , school_shirt , school_short 
+from .routers import user , schole_shoes , school_shirt , school_short , school_frocks
 
 
 models.Base.metadata.create_all(bind=engine)  #create the database tables
@@ -24,6 +24,7 @@ app.include_router(user.router)
 app.include_router(schole_shoes.router)
 app.include_router(school_shirt.router)
 app.include_router(school_short.router)
+app.include_router(school_frocks.router)
 
 @app.get("/")
 def read_root():

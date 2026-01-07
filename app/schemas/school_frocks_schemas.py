@@ -2,12 +2,12 @@ from pydantic import BaseModel
 from datetime import datetime
 
 class SchoolFrock(BaseModel):
-    size : int
+    size : str
     quntity : int
     
 class SchoolFrockOut(BaseModel):
     id : int
-    size : int
+    size : str
     quntity : int
     created_at : datetime
 
@@ -15,6 +15,6 @@ class SchoolFrockOut(BaseModel):
         orm_mode = True
         
 class FrockQuntityUpdate(BaseModel):
-    size : int
+    size : str 
     quntity : int
     action : str  # "sell" or "buy"
