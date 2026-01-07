@@ -27,4 +27,11 @@ def create_frock(frock: school_frocks_schemas.SchoolFrock, db: Session = Depends
         db.refresh(new_frock)
         return new_frock
     
+# Get all school frocks
+@router.get("", response_model=List[school_frocks_schemas.SchoolFrockOut])
+def get_all_frocks(db: Session = Depends(get_db), 
+                current_user: int = Depends(oauth2.get_current_user)):
+    
+    frocks = db.query(models.SchoolFrocks).all()
+    return frocks
     
